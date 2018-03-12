@@ -47,16 +47,12 @@ public class HelloWorldEndpoint {
 	@Produces("text/plain")
 	@Counted(monotonic = true)
 	public Response getConfigMap(@QueryParam("file") String fileUrl) throws IOException {
-
 		File f = new File(fileUrl);
-
 		if (f.exists()) {
 			return Response.ok(new String(Files.readAllBytes(Paths.get(f.getAbsolutePath())))).build();
 		} else {
 			return Response.status(Status.NOT_FOUND).build();
-
 		}
-
 	}
 
 }
