@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -22,28 +23,27 @@ public class HelloWorldEndpoint {
 
 	Logger LOG = Logger.getLogger(HelloWorldEndpoint.class);
 
-
-  @GET
-  @Produces("text/html")
+	@GET
+	@Produces("text/html")
 	@Counted(monotonic = true)
 	public Response getHome() {
-    LOG.info("Call /");
-    LOG.debug("Call / en mode debug");
-		return Response.ok("<html><a href=\"/hello\">hello</a><br/><a href=\"/secret\">secret</a><br/><a href=\"/configmap?file=/data/config.txt\">configMap</a><br/></html>").build();
+		LOG.info("Call /");
+		LOG.debug("Call / en mode debug");
+		return Response
+				.ok("<html><a href=\"/hello\">hello</a><br/><a href=\"/secret\">secret</a><br/><a href=\"/configmap?file=/data/config.txt\">configMap</a><br/></html>")
+				.build();
 	}
-
-
 
 	@GET
 	@Path("/hello")
 	@Produces("text/plain")
 	@Counted(monotonic = true)
-	public Response getHello() {
+	public Response getHello(@QueryParam("name") @DefaultValue("<userName>") String name) {
 
 		LOG.info("Call /hello");
 		LOG.debug("Call /hello en mode debug");
 
-		return Response.ok("Hello from WildFly ").build();
+		return Response.ok("Hello " + name + " from WildFly ").build();
 	}
 
 	@GET
@@ -51,8 +51,8 @@ public class HelloWorldEndpoint {
 	@Produces("text/plain")
 	@Counted(monotonic = true)
 	public Response getSecret() {
-    LOG.info("Call /secret");
-    LOG.debug("Call /secret en mode debug");
+		LOG.info("Call /secret");
+		LOG.debug("Call /secret en mode debug");
 		return Response.ok(System.getenv("MY_SECRET")).build();
 	}
 
@@ -61,8 +61,8 @@ public class HelloWorldEndpoint {
 	@Produces("text/plain")
 	@Counted(monotonic = true)
 	public Response getConfigMap(@QueryParam("file") String fileUrl) throws IOException {
-    LOG.info("Call /configmap");
-    LOG.debug("Call /configmap en mode debug");
+		LOG.info("Call /configmap");
+		LOG.debug("Call /configmap en mode debug");
 		File f = new File(fileUrl);
 		if (f.exists()) {
 			return Response.ok(new String(Files.readAllBytes(Paths.get(f.getAbsolutePath())))).build();
