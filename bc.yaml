@@ -16,6 +16,9 @@ spec:
                   stage('Build') {
                     openshiftBuild(buildConfig: 's2i-wildflyswarm-demo', showBuildLogs: 'true')
                   }
+                  stage('Test') {
+                    echo "Run Test"
+                  }
                   stage('Tag') {
                     openshiftTag(srcStream: 's2i-wildflyswarm-demo', srcTag: 'latest', destinationStream: 's2i-wildflyswarm-demo', destinationTag: 'QA')
                   }
