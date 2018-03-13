@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: BuildConfig
+metadata:
+  annotations:
+    pipeline.alpha.openshift.io/uses: '[{"name": "s2i-wildflyswarm-demo", "namespace": "", "kind": "DeploymentConfig"}]'
+  labels:
+    name: demo-pipeline
+  name: demo-pipeline
+spec:
+  strategy:
+    jenkinsPipelineStrategy:
+      jenkinsfile: |-
+        try {
+           timeout(time: 20, unit: 'MINUTES') {
+              node {
+                  stage('build') {
+                    openshiftBuild(buildConfig: 's2i-wildflyswarm-demo', showBuildLogs: 'true')
+                  }
+                  stage('deploy') {
+                    openshiftDeploy(deploymentConfig: 's2i-wildflyswarm-demo')
+                  }
+                }
+           }
+        } catch (err) {
+           echo "in catch block"
+           echo "Caught: ${err}"
+           currentBuild.result = 'FAILURE'
+           throw err
+        }
+type: JenkinsPipeline
