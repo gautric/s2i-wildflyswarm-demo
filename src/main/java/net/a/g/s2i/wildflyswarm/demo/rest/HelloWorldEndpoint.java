@@ -27,6 +27,8 @@ public class HelloWorldEndpoint {
   @Produces("text/html")
 	@Counted(monotonic = true)
 	public Response getHome() {
+    LOG.info("Call /");
+    LOG.debug("Call / en mode debug");
 		return Response.ok("<html><a href=\"/hello\">hello</a><br/><a href=\"/secret\">secret</a><br/><a href=\"/configmap?file=/data/config.txt\">configMap</a><br/></html>").build();
 	}
 
