@@ -39,14 +39,18 @@ public class HelloWorldEndpoint {
 	@Produces("text/plain")
 	@Counted(monotonic = true)
 	public Response getSecret() {
+    LOG.info("Call /secret");
+    LOG.debug("Call /secret en mode debug");
 		return Response.ok(System.getenv("MY_SECRET")).build();
 	}
 
 	@GET
-	@Path("/configMap")
+	@Path("/configmap")
 	@Produces("text/plain")
 	@Counted(monotonic = true)
 	public Response getConfigMap(@QueryParam("file") String fileUrl) throws IOException {
+    LOG.info("Call /configmap");
+    LOG.debug("Call /configmap en mode debug");
 		File f = new File(fileUrl);
 		if (f.exists()) {
 			return Response.ok(new String(Files.readAllBytes(Paths.get(f.getAbsolutePath())))).build();
