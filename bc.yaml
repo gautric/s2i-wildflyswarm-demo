@@ -13,10 +13,13 @@ spec:
         try {
            timeout(time: 20, unit: 'MINUTES') {
               node {
-                  stage('build') {
+                  stage('Build') {
                     openshiftBuild(buildConfig: 's2i-wildflyswarm-demo', showBuildLogs: 'true')
                   }
-                  stage('deploy') {
+                  stage('Tag') {
+                    openshiftTag(srcStream: 's2i-wildflyswarm-demo', srcTag: 'latest', destinationStream: 's2i-wildflyswarm-demo', destinationTag: 'QA', verbose: verbose)
+                  }
+                  stage('Deploy') {
                     openshiftDeploy(deploymentConfig: 's2i-wildflyswarm-demo')
                   }
                 }
