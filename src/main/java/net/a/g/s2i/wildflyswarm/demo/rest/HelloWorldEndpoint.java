@@ -22,6 +22,16 @@ public class HelloWorldEndpoint {
 
 	Logger LOG = Logger.getLogger(HelloWorldEndpoint.class);
 
+
+  @GET
+  @Produces("text/html")
+	@Counted(monotonic = true)
+	public Response getHome() {
+		return Response.ok("<html><a href=\"/hello\">hello</a><br/><a href=\"/secret\">secret</a><br/><a href=\"/configmap?file=/data/config.txt\">configMap</a><br/></html>").build();
+	}
+
+
+
 	@GET
 	@Path("/hello")
 	@Produces("text/plain")
